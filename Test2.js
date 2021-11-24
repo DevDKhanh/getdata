@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { text } from './text';
+import { token } from './token';
 import { View, Text } from 'react-native';
 
 const Test2 = () => {
-	const listDay = ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'];
+	const listDay = ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'];
 	const genesisDate = '16/08/2021';
-	const [dataSubject, setDataSubject] = useState([]);
+	const [arrayData, setArrayData] = useState([]);
 	useEffect(() => {
-		var formData = new FormData();
+		let formData = new FormData();
 		formData.append(
 			'__EVENTTARGET',
 			'ctl00$ContentPlaceHolder1$ctl00$rad_ThuTiet',
 		);
-		formData.append('__VIEWSTATE', text);
+		formData.append('__VIEWSTATE', token);
 		formData.append(
 			'ctl00$ContentPlaceHolder1$ctl00$rad_ThuTiet',
 			'rad_ThuTiet',
@@ -62,13 +62,13 @@ const Test2 = () => {
 							}
 						});
 					});
-					setDataSubject([...data]);
+					setArrayData(data);
 				}
 			})
 			.catch(function (e) {
 				console.log(e);
 			});
-		return () => setDataSubject([]);
+		return () => setArrayData([]);
 	}, []);
 
 	const getDateToWeek = (str, start) => {
@@ -96,8 +96,11 @@ const Test2 = () => {
 			let currentDay = item;
 			for (let i = 1; i <= 7; i++) {
 				const newDay = new Date(currentDay);
+				const mm = newDay.getMonth() + 1;
+				const dd = newDay.getDate();
+				const yyyy = newDay.getFullYear();
 				if (listDay[newDay.getDay()] == day) {
-					days.push(newDay.toLocaleDateString('en-GB'));
+					days.push(yyyy + '-' + mm + '-' + dd);
 				}
 				currentDay += 86400000;
 			}
@@ -107,7 +110,7 @@ const Test2 = () => {
 
 	return (
 		<View>
-			{console.log(dataSubject)}
+			{console.log(arrayData)}
 			<Text>Hello</Text>
 		</View>
 	);
